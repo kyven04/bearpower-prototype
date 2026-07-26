@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>威熊塑膠科技｜官網 Prototype v2</title>
+<style>
+  :root {
+    color-scheme: light;
+    --ink:        #0b0b0b;
+    --ink-soft:   #4a4a48;
+    --ink-mute:   #8a8985;
+    --line:       #e4e3dd;
+    --paper:      #ffffff;
+    --paper-soft: #f4f5f6;
+    --blue:       #0b63c9;
+    --blue-deep:  #08429c;
+    --blue-tint:  #eaf2fc;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:var(--paper); color:var(--ink);
+    font-family: system-ui,-apple-system,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif; }
+  img { max-width:100%; display:block; }
+  a { color:inherit; text-decoration:none; }
+  .wrap { max-width: 1200px; margin:0 auto; padding:0 32px; }
+  .eyebrow { font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--blue); margin-bottom:10px; }
+  .btn-pill {
+    display:inline-flex; align-items:center; gap:8px; font-size:13.5px; font-weight:700;
+    padding:13px 26px; border-radius:999px; background:var(--blue); color:#fff; border:1px solid var(--blue); cursor:pointer;
+  }
+  .btn-pill.outline { background:transparent; color:#fff; border-color:rgba(255,255,255,.6); }
+  .btn-pill.dark { background:var(--ink); border-color:var(--ink); }
+
+  /* ---- nav ---- */
+  header.nav { position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); }
+  .nav-inner { max-width:1200px; margin:0 auto; padding:14px 32px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  .nav-brand { display:flex; align-items:center; gap:10px; }
+  .nav-brand img { width:40px; height:40px; }
+  .nav-brand-text { display:flex; flex-direction:column; line-height:1.25; }
+  .nav-brand-name { font-weight:800; font-size:14.5px; }
+  .nav-brand-sub { font-size:10.5px; color:var(--ink-mute); letter-spacing:.04em; }
+  .nav-links { display:flex; align-items:center; gap:28px; flex-wrap:wrap; }
+  .nav-links a { font-size:13px; font-weight:600; color:var(--ink-soft); }
+  .nav-links a:hover { color:var(--blue); }
+  .lang-toggle { font-family:inherit; font-size:12px; font-weight:700; padding:7px 15px; border-radius:999px; border:1px solid var(--ink); background:var(--paper); color:var(--ink); cursor:pointer; }
+
+  /* ---- hero ---- */
+  section#hero { position:relative; min-height:640px; display:flex; align-items:flex-end; overflow:hidden; }
+  #heroImg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .hero-scrim { position:absolute; inset:0; background:linear-gradient(0deg, rgba(6,10,20,.86) 0%, rgba(6,10,20,.55) 45%, rgba(6,10,20,.25) 100%); }
+  .hero-inner { position:relative; z-index:2; color:#fff; padding:80px 32px 56px; width:100%; }
+  .hero-word { font-size:clamp(48px,9vw,120px); font-weight:800; letter-spacing:-.02em; line-height:.95; margin:0 0 18px; }
+  .hero-tag { font-size:clamp(16px,2vw,20px); font-weight:700; margin:0 0 14px; }
+  .hero-sub { font-size:14.5px; max-width:560px; line-height:1.8; color:rgba(255,255,255,.86); margin:0 0 28px; }
+
+  /* ---- capability block ---- */
+  section#capability { background:var(--blue); color:#fff; padding:80px 0; position:relative; overflow:hidden; }
+  .cap-ghost { position:absolute; top:-.15em; left:0; right:0; text-align:center; font-size:clamp(60px,11vw,180px); font-weight:800; color:rgba(255,255,255,.10); white-space:nowrap; line-height:1; user-select:none; }
+  .cap-inner { position:relative; z-index:2; max-width:640px; }
+  .cap-inner h2 { font-size:clamp(26px,4vw,40px); line-height:1.35; margin:0 0 18px; }
+  .cap-inner p { font-size:14.5px; line-height:1.9; color:rgba(255,255,255,.9); margin:0 0 26px; }
+
+  /* ---- about ---- */
+  section#about { padding:88px 0; border-bottom:1px solid var(--line); }
+  .about-grid { display:grid; grid-template-columns: 0.9fr 1.3fr; gap:50px; }
+  @media (max-width:800px){ .about-grid{ grid-template-columns:1fr; } }
+  .about-sticky { position:sticky; top:90px; align-self:start; }
+  .about-sticky h2 { font-size:clamp(26px,3.6vw,36px); margin:0 0 16px; }
+  .about-sticky p { font-size:14px; color:var(--ink-soft); line-height:1.85; margin:0 0 22px; }
+  .about-photo { border-radius:14px; overflow:hidden; margin-bottom:26px; }
+  .about-photo img { width:100%; height:280px; object-fit:cover; }
+  .about-facts { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+  .fact-card { background:var(--paper-soft); border:1px solid var(--line); border-radius:10px; padding:16px 18px; }
+  .fact-label { font-size:11px; color:var(--ink-mute); margin-bottom:5px; }
+  .fact-value { font-size:14.5px; font-weight:700; line-height:1.5; }
+  .locations { margin-top:8px; }
+  .locations li { font-size:13px; color:var(--ink-soft); padding:9px 0; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:10px; }
+  .locations { list-style:none; padding:0; margin:0; }
+
+  /* ---- products ---- */
+  section#products { padding:88px 0; border-bottom:1px solid var(--line); }
+  .products-head { display:flex; justify-content:space-between; align-items:flex-end; gap:20px; margin-bottom:36px; flex-wrap:wrap; }
+  .products-head h2 { font-size:clamp(26px,3.6vw,38px); margin:0; }
+  .products-head p { font-size:13.5px; color:var(--ink-mute); max-width:420px; margin:0; }
+  .product-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:2px; background:var(--line); border:1px solid var(--line); }
+  .product-card { background:var(--paper); cursor:pointer; padding:0; }
+  .pc-photo { background:var(--paper-soft); aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; padding:22px; }
+  .pc-photo img { max-height:100%; object-fit:contain; }
+  .pc-meta { padding:16px 18px 20px; }
+  .pc-index { font-size:11px; color:var(--blue); font-weight:800; margin-bottom:6px; }
+  .pc-name { font-size:15px; font-weight:700; margin-bottom:4px; }
+  .pc-name-en { font-size:11.5px; color:var(--ink-mute); }
+
+  .product-detail { grid-column:1/-1; background:var(--ink); color:#fff; padding:40px 36px; }
+  .pd-grid { display:grid; grid-template-columns:1fr 1.4fr; gap:40px; align-items:center; }
+  @media (max-width:700px){ .pd-grid{ grid-template-columns:1fr; } }
+  .pd-photo { background:#fff; border-radius:12px; padding:24px; display:flex; align-items:center; justify-content:center; min-height:220px; }
+  .pd-photo img { max-height:260px; object-fit:contain; }
+  .pd-index { font-size:12px; color:#8fb8ee; font-weight:800; margin-bottom:8px; }
+  .pd-name { font-size:26px; font-weight:800; margin:0 0 4px; }
+  .pd-name-en { font-size:13px; color:#9aa2ad; margin-bottom:16px; }
+  .pd-desc { font-size:13.5px; line-height:1.85; color:#d7dade; margin-bottom:16px; }
+  .pd-note { font-size:12px; color:#8fb8ee; }
+  .pd-close { margin-top:20px; }
+
+  /* ---- contact ---- */
+  section#contact { padding:88px 0; }
+  .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:50px; }
+  @media (max-width:800px){ .contact-grid{ grid-template-columns:1fr; } }
+  .contact-grid h2 { font-size:clamp(26px,3.6vw,36px); margin:0 0 16px; }
+  .contact-grid p { font-size:14px; color:var(--ink-soft); line-height:1.85; margin:0 0 20px; }
+  .contact-info li { list-style:none; font-size:13.5px; color:var(--ink-soft); padding:12px 0; border-top:1px solid var(--line); }
+  .contact-info { padding:0; margin:0 0 20px; }
+  .contact-info b { display:block; font-size:11px; color:var(--ink-mute); font-weight:600; margin-bottom:4px; }
+  .contact-form label { display:block; font-size:12px; color:var(--ink-mute); margin-bottom:6px; }
+  .contact-form input, .contact-form textarea { width:100%; font-family:inherit; font-size:13.5px; padding:11px 12px; border-radius:8px; border:1px solid var(--line); background:var(--paper-soft); margin-bottom:14px; }
+  .contact-form textarea { min-height:100px; resize:vertical; }
+
+  /* ---- footer ---- */
+  footer.pagefoot { background:var(--blue); color:#fff; padding:64px 0 34px; }
+  .foot-top { display:flex; justify-content:space-between; gap:30px; flex-wrap:wrap; margin-bottom:56px; }
+  .foot-contact p { font-size:13px; color:rgba(255,255,255,.8); margin:0 0 14px; }
+  .foot-contact .foot-phone { font-size:30px; font-weight:800; margin:0 0 16px; }
+  .foot-nav { display:flex; flex-direction:column; gap:10px; align-items:flex-end; }
+  .foot-nav a { font-size:13.5px; font-weight:600; }
+  .foot-word { font-size:clamp(52px,11vw,150px); font-weight:800; letter-spacing:-.02em; line-height:1; opacity:.9; }
+  .foot-bottom { display:flex; justify-content:space-between; font-size:11.5px; color:rgba(255,255,255,.7); flex-wrap:wrap; gap:10px; margin-top:20px; }
+
+  /* ---- chat widget ---- */
+  .chat-launcher { position:fixed; right:22px; bottom:22px; z-index:60; width:58px; height:58px; border-radius:50%; background:var(--blue); color:#fff; border:none; font-size:24px; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,.25); }
+  .chat-panel { position:fixed; right:22px; bottom:92px; z-index:60; width:340px; max-width:calc(100vw - 44px); max-height:68vh; background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:0 12px 34px rgba(0,0,0,.25); display:flex; flex-direction:column; overflow:hidden; }
+  .chat-head { background:var(--blue); color:#fff; padding:12px 16px; font-size:13.5px; font-weight:700; display:flex; align-items:center; justify-content:space-between; }
+  .chat-head button { background:none; border:none; color:#fff; font-size:16px; cursor:pointer; }
+  .chat-body { flex:1; overflow-y:auto; padding:12px 14px; display:flex; flex-direction:column; gap:10px; }
+  .chat-chips { display:flex; flex-wrap:wrap; gap:6px; padding:0 14px 10px; }
+  .chat-chip { font-family:inherit; font-size:11px; padding:6px 10px; border-radius:999px; border:1px solid var(--blue); background:var(--blue-tint); color:var(--blue); cursor:pointer; }
+  .msg { max-width:85%; font-size:12.5px; line-height:1.6; padding:8px 11px; border-radius:10px; }
+  .msg.user { align-self:flex-end; background:var(--blue); color:#fff; border-bottom-right-radius:2px; }
+  .msg.ai { align-self:flex-start; background:var(--paper-soft); color:var(--ink); border-bottom-left-radius:2px; }
+  .msg .msg-links { margin-top:8px; display:flex; flex-wrap:wrap; gap:6px; }
+  .msg .msg-links button { font-family:inherit; font-size:11px; font-weight:700; padding:5px 9px; border-radius:7px; border:1px solid var(--blue); background:#fff; color:var(--blue); cursor:pointer; }
+  .chat-input-row { display:flex; gap:8px; padding:10px 12px; border-top:1px solid var(--line); }
+  .chat-input-row input { flex:1; font-family:inherit; font-size:12.5px; padding:8px 10px; border-radius:8px; border:1px solid var(--line); }
+  .chat-input-row button { font-family:inherit; font-size:12px; font-weight:700; padding:8px 12px; border-radius:8px; border:1px solid var(--blue); background:var(--blue); color:#fff; cursor:pointer; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="#hero">
+      <img src="https://bearpowerplastic.com/wp-content/uploads/2023/11/bear-logo.png" alt="Bear Power logo">
+      <span class="nav-brand-text">
+        <span class="nav-brand-name" id="brandName"></span>
+        <span class="nav-brand-sub" id="brandSub"></span>
+      </span>
+    </a>
+    <div class="nav-links">
+      <a href="#hero" id="navHome"></a>
+      <a href="#about" id="navAbout"></a>
+      <a href="#products" id="navProducts"></a>
+      <a href="#contact" id="navContact"></a>
+      <button class="lang-toggle" id="langToggle"></button>
+    </div>
+  </div>
+</header>
+
+<section id="hero">
+  <img id="heroImg" src="https://bearpowerplastic.com/wp-content/uploads/2023/11/DSC06864-2048x1359.jpg" alt="Bearpower factory">
+  <div class="hero-scrim"></div>
+  <div class="hero-inner">
+    <h1 class="hero-word" id="heroWord">BEAR POWER</h1>
+    <p class="hero-tag" id="heroTag"></p>
+    <p class="hero-sub" id="heroSub"></p>
+    <a class="btn-pill" href="#products" id="heroCta"></a>
+  </div>
+</section>
+
+<section id="capability">
+  <div class="cap-ghost" id="capGhost"></div>
+  <div class="wrap">
+    <div class="cap-inner">
+      <div class="eyebrow" style="color:#bcd8fb" id="capEyebrow"></div>
+      <h2 id="capTitle"></h2>
+      <p id="capBody"></p>
+      <a class="btn-pill outline" href="#about" id="capCta"></a>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about-grid">
+    <div class="about-sticky">
+      <div class="eyebrow" id="aboutEyebrow"></div>
+      <h2 id="aboutTitle"></h2>
+      <p id="aboutBody"></p>
+      <ul class="locations" id="aboutLocations"></ul>
+    </div>
+    <div>
+      <div class="about-photo"><img src="https://bearpowerplastic.com/wp-content/uploads/2023/11/material-img2-5-1024x768.jpg" alt="Bearpower delivery"></div>
+      <div class="about-facts" id="aboutFacts"></div>
+    </div>
+  </div>
+</section>
+
+<section id="products">
+  <div class="wrap">
+    <div class="products-head">
+      <h2 id="productsTitle"></h2>
+      <p id="productsSub"></p>
+    </div>
+    <div class="product-grid" id="productGrid"></div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap contact-grid">
+    <div>
+      <div class="eyebrow" id="contactEyebrow"></div>
+      <h2 id="contactTitle"></h2>
+      <p id="contactBody"></p>
+      <ul class="contact-info" id="contactInfo"></ul>
+    </div>
+    <div class="contact-form" id="contactForm"></div>
+  </div>
+</section>
+
+<button class="chat-launcher" id="chatLauncher">💬</button>
+<div class="chat-panel" id="chatPanel" style="display:none;">
+  <div class="chat-head"><span id="chatHeadTitle"></span><button id="chatCloseBtn">✕</button></div>
+  <div class="chat-chips" id="chatChips"></div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-input-row">
+    <input type="text" id="chatInput" placeholder="">
+    <button id="chatSendBtn" type="button"></button>
+  </div>
+</div>
+
+<footer class="pagefoot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-contact">
+        <p id="footContactLabel"></p>
+        <p class="foot-phone" id="footPhone"></p>
+        <a class="btn-pill dark" href="#contact" id="footCta"></a>
+      </div>
+      <nav class="foot-nav">
+        <a href="#hero" id="footNavHome"></a>
+        <a href="#about" id="footNavAbout"></a>
+        <a href="#products" id="footNavProducts"></a>
+        <a href="#contact" id="footNavContact"></a>
+      </nav>
+    </div>
+    <div class="foot-word">BEAR POWER</div>
+    <div class="foot-bottom">
+      <span id="footCopy"></span>
+      <span id="footAddr"></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const IMG = {
+  logo: 'https://bearpowerplastic.com/wp-content/uploads/2023/11/bear-logo.png',
+  hero: 'https://bearpowerplastic.com/wp-content/uploads/2023/11/DSC06864-2048x1359.jpg',
+  truck: 'https://bearpowerplastic.com/wp-content/uploads/2023/11/material-img2-5-1024x768.jpg',
+  kSeries: 'https://bearpowerplastic.com/wp-content/uploads/2023/11/k1000-1-e1700708160533.png',
+  mSeries: 'https://bearpowerplastic.com/wp-content/uploads/2023/11/c65f8152-f33b-4f75-8754-5812cede3b7c-e1700718447250.png',
+  pePipe: 'https://bearpowerplastic.com/wp-content/uploads/2023/11/LT3000%E9%BB%91-e1700711952522.png',
+  traffic: 'https://bearpowerplastic.com/wp-content/uploads/2023/11/DSC06882-e1700710970317.png',
+  septic: 'https://bearpowerplastic.com/wp-content/uploads/2023/11/PE10%E4%BA%BA%E6%A9%A2%E5%9C%93%E5%8C%96%E7%B3%9E%E6%A7%BD-1-e1700709444250.png',
+  chute: 'https://bearpowerplastic.com/wp-content/uploads/2023/11/%E5%9E%83%E5%9C%BE%E5%B0%8E%E7%AE%A1Y-3-e1700716081731.png',
+  toilet: 'https://bearpowerplastic.com/wp-content/uploads/2023/11/FRP-e1700718020241-2.png',
+  tower: 'https://bearpowerplastic.com/wp-content/uploads/2023/11/PT1000-2-e1700716956332.png',
+  mesh: 'https://bearpowerplastic.com/wp-content/uploads/2023/11/IMG_3327-e1700711546951.png',
+  transport: 'https://bearpowerplastic.com/wp-content/uploads/2023/11/IMG_4861-e1700708606837.png'
+};
+
+const CONTENT = {
+  zh: {
+    nav: { home:'首頁', about:'關於威熊', products:'產品介紹', contact:'聯絡我們', lang:'EN' },
+    brand: { name:'威熊塑膠科技', sub:'BEAR POWER PLASTIC TECHNOLOGY' },
+    hero: { tag:'品質至上、以客為尊', sub:'威熊塑膠科技深耕塑膠射出與成型製造，產品廣泛應用於農業、水產、化工、營建、水電與環保等產業，行銷國內外市場。', cta:'查看產品 →' },
+    capability: { eyebrow:'製程能力', ghost:'SHAPE IT', title:'從滾塑到押出，成就每一種形狀', body:'威熊具備滾塑成型、押出成型與 FRP 積層纏繞三大製程能力，依產品剛性、尺寸與應用場景，為客戶量身打造最合適的塑膠解決方案。', cta:'了解威熊 →' },
+    about: {
+      eyebrow:'關於我們', title:'關於威熊',
+      body:'威熊塑膠科技為台灣塑膠製造商，具備20多年產業經驗，產品線涵蓋儲水設備、管材、化糞槽與交通安全器材等，行銷國內外市場。〔公司沿革與正式認證資訊將於合作後依威熊提供之最新資料更新〕',
+      locationsTitle:'服務據點',
+      locations:[ { name:'總公司｜雲林虎尾', tag:'HQ' }, { name:'雲林莿桐倉儲', tag:'倉儲' }, { name:'花蓮吉安倉儲', tag:'倉儲' }, { name:'新北林口倉儲', tag:'倉儲' } ],
+      facts:[ { label:'核心製程', value:'滾塑／押出／FRP' }, { label:'服務產業', value:'農業／水產／化工／營建／水電／環保' }, { label:'市場範圍', value:'台灣製造，行銷海內外' } ]
+    },
+    productsTitle:'產品介紹', productsSub:'威熊塑膠十大產品系列，點選卡片查看詳細介紹。',
+    products:[
+      { id:'k', img:IMGKEY('kSeries'), zh:'K系列方桶', en:'K Series Square Buckets', note:'6種容量規格可選', desc:'方形儲水桶產品線，依容量與尺寸提供多款規格，適用於農業、水產、化工等各式儲液需求。' },
+      { id:'m', img:IMGKEY('mSeries'), zh:'M系列方桶', en:'M Series Square Buckets', note:'', desc:'M系列方桶，提供不同於K系列的容量與尺寸選擇，滿足客戶多元儲存需求。' },
+      { id:'pipe', img:IMGKEY('pePipe'), zh:'PE黑管', en:'PE Black Pipes', note:'', desc:'PE黑管採連續押出製程生產，適用於各式管路配置與工程應用。' },
+      { id:'traffic', img:IMGKEY('traffic'), zh:'交通器材', en:'Traffic Equipment', note:'', desc:'涵蓋交通錐、水馬等道路安全設施，依產品特性選用射出或滾塑成型製程。' },
+      { id:'septic', img:IMGKEY('septic'), zh:'化糞槽', en:'Septic Tanks', note:'6人／10人容量規格', desc:'橢圓化糞槽產品線，提供6人與10人等不同容量規格，適用於住宅與工程場域。' },
+      { id:'chute', img:IMGKEY('chute'), zh:'垃圾導管', en:'Garbage Chutes', note:'Y型／直型', desc:'建築用垃圾導管，提供Y型與直型等接管型式，適用於大樓垃圾集中系統。' },
+      { id:'toilet', img:IMGKEY('toilet'), zh:'流動廁所', en:'Portable Toilets', note:'', desc:'流動廁所／整體衛浴產品，體積輕巧、施工便利，適用於工地與活動場地。' },
+      { id:'tower', img:IMGKEY('tower'), zh:'直立式水塔', en:'Vertical Water Tanks', note:'', desc:'直立式水塔採滾塑成型製程，模具旋轉加熱使塑料均勻附著，確保結構強度與水密性。' },
+      { id:'mesh', img:IMGKEY('mesh'), zh:'萬能網', en:'Universal Mesh/Netting', note:'', desc:'多用途塑膠網具，可依場域需求應用於農業防護、建築圍籬等場景。' },
+      { id:'transport', img:IMGKEY('transport'), zh:'運輸桶', en:'Transport Buckets', note:'', desc:'運輸桶產品線，適用於農漁業與物流場域的載運與週轉需求。' }
+    ],
+    contact: {
+      eyebrow:'聯絡我們', title:'聯絡我們', body:'有興趣了解更多威熊塑膠的產品與合作方式嗎？留下您的訊息，我們將盡快與您聯繫。',
+      info:[ { label:'電話', value:'(05) 622-4567．(05) 622-6116' }, { label:'地址', value:'632 台灣雲林縣虎尾鎮延平路80-8號' }, { label:'服務時間', value:'週一至週五 09:00–17:30' } ],
+      labels:{ name:'姓名', company:'公司名稱', email:'Email', message:'需求說明', submit:'送出（示意用途，尚未串接）' }
+    },
+    footer:{ contactLabel:'製造、報價與合作洽詢', cta:'聯絡我們 →', copy:'© 2026 Bear Power Plastic Technology', addr:'632 台灣雲林縣虎尾鎮延平路80-8號' },
+    chat: {
+      headTitle:'威熊 AI 諮詢助手（Demo）', inputPlaceholder:'輸入您的問題…', send:'送出', viewProduct:'查看產品 →',
+      fallback:'感謝您的提問！這是概念展示版本，完整版 AI 諮詢平台上線後將能回答更多產品細節。您可以點選上方常見問題，或直接前往「聯絡我們」留下訊息。',
+      qa:[
+        { id:'overview', keywords:['產品','生產','系列'], chip:'貴公司主要生產哪些產品？', reply:'威熊塑膠共有十大產品系列，包含方桶、管材、化糞槽、交通器材等。您可以點選下方連結查看熱門系列：', linkTo:'pick', picks:['k','septic','tower','traffic'] },
+        { id:'process', keywords:['製程','技術'], chip:'採用哪些製程技術？', reply:'我們具備滾塑成型、押出成型與 FRP 積層／纏繞成型三大核心製程能力，依產品特性選用最適合的製程。', linkTo:'products' },
+        { id:'customization', keywords:['客製','訂製','oem','odm'], chip:'是否支援客製化或 OEM/ODM？', reply:'可以，我們可依產品尺寸與應用需求進行客製化調整。詳細規格請透過下方聯絡窗口與我們討論。', linkTo:'contact' },
+        { id:'moq', keywords:['訂購量','交期','數量','moq'], chip:'最小訂購量與交期為何？', reply:'實際 MOQ 與交期會依產品線與訂單規模而異〔正式數字將由威熊業務團隊提供〕，歡迎透過聯絡窗口提出需求。', linkTo:'contact' },
+        { id:'quote', keywords:['報價','價格','聯絡'], chip:'如何取得報價或聯絡你們？', reply:'歡迎直接前往下方「聯絡我們」區塊留下您的需求，威熊業務團隊將盡快與您聯繫。', linkTo:'contact' }
+      ]
+    }
+  },
+  en: {
+    nav: { home:'Home', about:'About', products:'Products', contact:'Contact', lang:'中文' },
+    brand: { name:'Bear Power Plastic', sub:'威熊塑膠科技' },
+    hero: { tag:'Quality First, Customer-Centric', sub:'Bearpower Plastics Technology specializes in plastic injection and molding manufacturing, with products serving agriculture, aquaculture, chemical, construction, plumbing, and environmental industries at home and abroad.', cta:'View Products →' },
+    capability: { eyebrow:'Manufacturing Capability', ghost:'SHAPE IT', title:'From Rotomolding to Extrusion — Every Shape, Realized', body:'Bearpower brings together rotational molding, extrusion, and FRP lamination/winding — tailoring the right process to each product’s rigidity, size, and application.', cta:'About Bearpower →' },
+    about: {
+      eyebrow:'About Us', title:'About Bearpower',
+      body:'Bearpower Plastics Technology is a Taiwan-based manufacturer with 20+ years of industry experience, serving water storage, piping, septic, and traffic safety product lines for domestic and overseas markets. [Company history and formal certification details will be updated with information provided by Bearpower.]',
+      locationsTitle:'Locations',
+      locations:[ { name:'HQ · Huwei, Yunlin', tag:'HQ' }, { name:'Zitong, Yunlin Warehouse', tag:'Warehouse' }, { name:'Ji’an, Hualien Warehouse', tag:'Warehouse' }, { name:'Linkou, New Taipei Warehouse', tag:'Warehouse' } ],
+      facts:[ { label:'Core Processes', value:'Rotomolding / Extrusion / FRP' }, { label:'Industries Served', value:'Agriculture / Aquaculture / Chemical / Construction / Plumbing / Environmental' }, { label:'Market Reach', value:'Made in Taiwan, sold worldwide' } ]
+    },
+    productsTitle:'Products', productsSub:'Ten product series from Bearpower — click a card for details.',
+    products:[
+      { id:'k', img:IMGKEY('kSeries'), zh:'K系列方桶', en:'K Series Square Buckets', note:'6 capacity options', desc:'Square water buckets available in multiple capacities and sizes — suited for agriculture, aquaculture, chemical, and other liquid storage needs.' },
+      { id:'m', img:IMGKEY('mSeries'), zh:'M系列方桶', en:'M Series Square Buckets', note:'', desc:'M Series buckets offer an alternative capacity and size range to the K Series, meeting a wider variety of storage needs.' },
+      { id:'pipe', img:IMGKEY('pePipe'), zh:'PE黑管', en:'PE Black Pipes', note:'', desc:'PE black pipes produced via continuous extrusion — suited for a range of piping configurations and engineering applications.' },
+      { id:'traffic', img:IMGKEY('traffic'), zh:'交通器材', en:'Traffic Equipment', note:'', desc:'Traffic cones, water-filled barriers, and related road safety equipment — manufactured via injection or rotational molding depending on the product.' },
+      { id:'septic', img:IMGKEY('septic'), zh:'化糞槽', en:'Septic Tanks', note:'6-person / 10-person', desc:'Oval septic tanks available in 6-person and 10-person capacities, suited for residential and construction sites.' },
+      { id:'chute', img:IMGKEY('chute'), zh:'垃圾導管', en:'Garbage Chutes', note:'Y-type / Straight', desc:'Building garbage chutes available in Y-type and straight configurations — suited for centralized waste systems in buildings.' },
+      { id:'toilet', img:IMGKEY('toilet'), zh:'流動廁所', en:'Portable Toilets', note:'', desc:'Portable toilet / integrated bathroom units — lightweight and easy to install for construction sites and event venues.' },
+      { id:'tower', img:IMGKEY('tower'), zh:'直立式水塔', en:'Vertical Water Tanks', note:'', desc:'Vertical water tanks formed via rotational molding for uniform wall thickness, structural strength, and watertightness.' },
+      { id:'mesh', img:IMGKEY('mesh'), zh:'萬能網', en:'Universal Mesh/Netting', note:'', desc:'Multi-purpose plastic netting for agricultural protection, construction fencing, and other applications.' },
+      { id:'transport', img:IMGKEY('transport'), zh:'運輸桶', en:'Transport Buckets', note:'', desc:'Transport buckets suited for logistics and turnover needs in agriculture, fishery, and distribution settings.' }
+    ],
+    contact: {
+      eyebrow:'Contact', title:'Contact Us', body:'Interested in learning more about Bearpower’s products and partnership opportunities? Leave us a message and we’ll get back to you shortly.',
+      info:[ { label:'Phone', value:'(05) 622-4567 · (05) 622-6116' }, { label:'Address', value:'No. 80-8, Yanping Rd., Huwei Township, Yunlin County 632, Taiwan' }, { label:'Hours', value:'Mon–Fri 09:00–17:30' } ],
+      labels:{ name:'Name', company:'Company', email:'Email', message:'Message', submit:'Submit (demo only, not yet connected)' }
+    },
+    footer:{ contactLabel:'Manufacturing, quotes & partnership inquiries', cta:'Contact Us →', copy:'© 2026 Bear Power Plastic Technology', addr:'No. 80-8, Yanping Rd., Huwei Township, Yunlin County 632, Taiwan' },
+    chat: {
+      headTitle:'Bearpower AI Consultant (Demo)', inputPlaceholder:'Type your question…', send:'Send', viewProduct:'View Product →',
+      fallback:'Thanks for your question! This is a concept demo — the full AI consultation platform will answer more detailed product questions once launched. Feel free to click a quick question above, or head to Contact to leave a message.',
+      qa:[
+        { id:'overview', keywords:['product','products','series'], chip:'What products do you manufacture?', reply:'Bearpower offers ten product series, including buckets, piping, septic tanks, and traffic equipment. Click below to view popular series:', linkTo:'pick', picks:['k','septic','tower','traffic'] },
+        { id:'process', keywords:['process','manufactur','technology'], chip:'What manufacturing processes do you use?', reply:'We have three core process capabilities: rotational molding, extrusion, and FRP lamination/winding — selecting the best-fit process for each product.', linkTo:'products' },
+        { id:'customization', keywords:['custom','oem','odm'], chip:'Do you support OEM/ODM or custom specifications?', reply:'Yes — we offer customization based on size and application requirements. Please reach out via the contact section below to discuss detailed specifications.', linkTo:'contact' },
+        { id:'moq', keywords:['moq','minimum','lead time','quantity'], chip:'What is your MOQ and lead time?', reply:'MOQ and lead times vary by product line and order scale [exact figures to be provided by Bearpower’s sales team]. Please share your requirements via the contact section.', linkTo:'contact' },
+        { id:'quote', keywords:['quote','price','contact'], chip:'How can I get a quote or contact you?', reply:'Please head to the Contact section below and share your requirements — Bearpower’s sales team will get back to you shortly.', linkTo:'contact' }
+      ]
+    }
+  }
+};
+function IMGKEY(k){ return k; }
+
+let state = { lang:'zh', activeProduct:null, chatOpen:false, chatMessages:[] };
+function T(){ return CONTENT[state.lang]; }
+
+function renderNav(){
+  const t=T();
+  document.getElementById('brandName').textContent=t.brand.name;
+  document.getElementById('brandSub').textContent=t.brand.sub;
+  document.getElementById('navHome').textContent=t.nav.home;
+  document.getElementById('navAbout').textContent=t.nav.about;
+  document.getElementById('navProducts').textContent=t.nav.products;
+  document.getElementById('navContact').textContent=t.nav.contact;
+  document.getElementById('langToggle').textContent=t.nav.lang;
+}
+function renderHero(){
+  const t=T();
+  document.getElementById('heroTag').textContent=t.hero.tag;
+  document.getElementById('heroSub').textContent=t.hero.sub;
+  document.getElementById('heroCta').textContent=t.hero.cta;
+}
+function renderCapability(){
+  const t=T();
+  document.getElementById('capGhost').textContent=t.capability.ghost;
+  document.getElementById('capEyebrow').textContent=t.capability.eyebrow;
+  document.getElementById('capTitle').textContent=t.capability.title;
+  document.getElementById('capBody').textContent=t.capability.body;
+  document.getElementById('capCta').textContent=t.capability.cta;
+}
+function renderAbout(){
+  const t=T();
+  document.getElementById('aboutEyebrow').textContent=t.about.eyebrow;
+  document.getElementById('aboutTitle').textContent=t.about.title;
+  document.getElementById('aboutBody').textContent=t.about.body;
+  document.getElementById('aboutLocations').innerHTML = t.about.locations.map(l=>`<li>${l.name}<span style="color:var(--ink-mute)">${l.tag}</span></li>`).join('');
+  document.getElementById('aboutFacts').innerHTML = t.about.facts.map(f=>`<div class="fact-card"><div class="fact-label">${f.label}</div><div class="fact-value">${f.value}</div></div>`).join('');
+}
+function renderProducts(){
+  const t=T();
+  document.getElementById('productsTitle').textContent=t.productsTitle;
+  document.getElementById('productsSub').textContent=t.productsSub;
+  const grid=document.getElementById('productGrid');
+  grid.innerHTML = t.products.map((p,i)=>`
+    <button class="product-card" data-pid="${p.id}">
+      <div class="pc-photo"><img src="${IMG[p.img]}" alt="${p.zh}" loading="lazy"></div>
+      <div class="pc-meta">
+        <div class="pc-index">${String(i+1).padStart(2,'0')}</div>
+        <div class="pc-name">${state.lang==='zh'?p.zh:p.en}</div>
+        <div class="pc-name-en">${state.lang==='zh'?p.en:p.zh}</div>
+      </div>
+    </button>
+  `).join('') + (state.activeProduct ? renderProductDetail(t.products.find(p=>p.id===state.activeProduct), t.products.findIndex(p=>p.id===state.activeProduct)) : '');
+
+  grid.querySelectorAll('.product-card').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const pid=btn.dataset.pid;
+      state.activeProduct = state.activeProduct===pid ? null : pid;
+      renderProducts();
+      if (state.activeProduct) document.getElementById('productGrid').scrollIntoView({behavior:'smooth', block:'nearest'});
+    });
+  });
+  const closeBtn = grid.querySelector('.pd-close');
+  if (closeBtn) closeBtn.addEventListener('click', (e)=>{ e.stopPropagation(); state.activeProduct=null; renderProducts(); });
+}
+function renderProductDetail(p, idx){
+  return `
+    <div class="product-detail">
+      <div class="pd-grid">
+        <div class="pd-photo"><img src="${IMG[p.img]}" alt="${p.zh}"></div>
+        <div>
+          <div class="pd-index">${String(idx+1).padStart(2,'0')} / ${T().products.length}</div>
+          <div class="pd-name">${state.lang==='zh'?p.zh:p.en}</div>
+          <div class="pd-name-en">${state.lang==='zh'?p.en:p.zh}</div>
+          <p class="pd-desc">${p.desc}</p>
+          ${p.note ? `<div class="pd-note">${p.note}</div>` : ''}
+          <button class="btn-pill outline pd-close" style="border-color:#fff;">${state.lang==='zh'?'收合 ▲':'Collapse ▲'}</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function renderContact(){
+  const t=T();
+  document.getElementById('contactEyebrow').textContent=t.contact.eyebrow;
+  document.getElementById('contactTitle').textContent=t.contact.title;
+  document.getElementById('contactBody').textContent=t.contact.body;
+  document.getElementById('contactInfo').innerHTML = t.contact.info.map(i=>`<li><b>${i.label}</b>${i.value}</li>`).join('');
+  const l=t.contact.labels;
+  document.getElementById('contactForm').innerHTML = `
+    <label>${l.name}</label><input type="text">
+    <label>${l.company}</label><input type="text">
+    <label>${l.email}</label><input type="text">
+    <label>${l.message}</label><textarea></textarea>
+    <button class="btn-pill dark" type="button" disabled style="opacity:.5; cursor:not-allowed; width:100%; justify-content:center;">${l.submit}</button>
+  `;
+}
+function renderFooter(){
+  const t=T();
+  document.getElementById('footContactLabel').textContent=t.footer.contactLabel;
+  document.getElementById('footPhone').textContent=t.contact.info[0].value;
+  document.getElementById('footCta').textContent=t.footer.cta;
+  document.getElementById('footNavHome').textContent=t.nav.home;
+  document.getElementById('footNavAbout').textContent=t.nav.about;
+  document.getElementById('footNavProducts').textContent=t.nav.products;
+  document.getElementById('footNavContact').textContent=t.nav.contact;
+  document.getElementById('footCopy').textContent=t.footer.copy;
+  document.getElementById('footAddr').textContent=t.footer.addr;
+}
+function renderChat(){
+  const t=T();
+  document.getElementById('chatPanel').style.display = state.chatOpen ? 'flex':'none';
+  document.getElementById('chatHeadTitle').textContent=t.chat.headTitle;
+  document.getElementById('chatInput').placeholder=t.chat.inputPlaceholder;
+  document.getElementById('chatSendBtn').textContent=t.chat.send;
+  document.getElementById('chatChips').innerHTML = t.chat.qa.map(q=>`<button class="chat-chip" data-qid="${q.id}">${q.chip}</button>`).join('');
+  document.getElementById('chatChips').querySelectorAll('.chat-chip').forEach(btn=>btn.addEventListener('click', ()=>sendQuickQuestion(btn.dataset.qid)));
+
+  const body=document.getElementById('chatBody');
+  body.innerHTML = state.chatMessages.map(m=>{
+    if (m.from==='user'){ const text = m.qId ? t.chat.qa.find(q=>q.id===m.qId).chip : m.raw; return `<div class="msg user">${text}</div>`; }
+    const qa=t.chat.qa.find(q=>q.id===m.qId);
+    const replyText = qa ? qa.reply : t.chat.fallback;
+    let links='';
+    if (qa && qa.linkTo==='pick'){ links=`<div class="msg-links">${qa.picks.map(pid=>{ const p=t.products.find(pp=>pp.id===pid); return `<button data-goto="${pid}">${state.lang==='zh'?p.zh:p.en}</button>`; }).join('')}</div>`; }
+    else if (qa && qa.linkTo==='products'){ links=`<div class="msg-links"><button data-goto="products">${t.chat.viewProduct}</button></div>`; }
+    else if (qa && qa.linkTo==='contact'){ links=`<div class="msg-links"><button data-goto="contact">${t.nav.contact} →</button></div>`; }
+    return `<div class="msg ai">${replyText}${links}</div>`;
+  }).join('');
+  body.scrollTop=body.scrollHeight;
+  body.querySelectorAll('[data-goto]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const goto=btn.dataset.goto;
+      if (goto==='products'||goto==='contact'){ document.getElementById(goto).scrollIntoView({behavior:'smooth'}); }
+      else { state.activeProduct=goto; renderProducts(); document.getElementById('products').scrollIntoView({behavior:'smooth'}); }
+    });
+  });
+}
+function sendQuickQuestion(qId){ state.chatMessages.push({from:'user',qId}); state.chatMessages.push({from:'ai',qId}); renderChat(); }
+function sendFreeText(raw){
+  if(!raw.trim()) return;
+  const lower=raw.toLowerCase(); const t=T();
+  const matched=t.chat.qa.find(q=>q.keywords.some(k=>lower.includes(k.toLowerCase())));
+  state.chatMessages.push({from:'user',raw});
+  state.chatMessages.push({from:'ai', qId: matched?matched.id:null});
+  renderChat();
+}
+
+function renderAll(){ renderNav(); renderHero(); renderCapability(); renderAbout(); renderProducts(); renderContact(); renderFooter(); renderChat(); }
+
+document.getElementById('langToggle').addEventListener('click', ()=>{ state.lang = state.lang==='zh'?'en':'zh'; renderAll(); });
+document.getElementById('chatLauncher').addEventListener('click', ()=>{ state.chatOpen=!state.chatOpen; renderChat(); });
+document.getElementById('chatCloseBtn').addEventListener('click', ()=>{ state.chatOpen=false; renderChat(); });
+document.getElementById('chatSendBtn').addEventListener('click', ()=>{ const i=document.getElementById('chatInput'); sendFreeText(i.value); i.value=''; });
+document.getElementById('chatInput').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ const i=document.getElementById('chatInput'); sendFreeText(i.value); i.value=''; } });
+
+renderAll();
+</script>
+
+</body>
+</html>
